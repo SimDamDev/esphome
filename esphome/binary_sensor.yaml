@@ -1,0 +1,180 @@
+binary_sensor:
+
+  - platform: homeassistant
+    entity_id: light.planfond
+    id: cuisine_planfond_state
+
+  - platform: nextion
+    page_id: 0
+    component_id: 1
+    component_name: page0.bt0
+    id: cuisine_light
+    update_interval: 1s
+
+  - platform: nextion
+    page_id: 0
+    component_id: 3
+    component_name: page0.bright_minus
+    id: bright_minus
+    on_click:
+    #possible de deplacer ca dans un script?
+      if:
+        condition:
+          lambda: |-
+            return id(cuisine_light).state;
+        then:
+          - lambda: |-
+              id(minus_13)->execute(id(bright_text).state);
+              id(text_bright)->execute();
+          - if:
+              condition:
+                lambda: 'return stoi(id(bright_text).state) < 13;'
+              then:
+                homeassistant.service:
+                  service: light.turn_on
+                  data:
+                    entity_id: light.planfond
+                    brightness: "10"
+              else:
+                homeassistant.service:
+                  service: light.turn_on
+                  data:
+                    entity_id: light.planfond
+                    brightness: !lambda 'return id(cuisine_planfond_bright).state;'
+
+  - platform: nextion
+    page_id: 0
+    component_id: 4
+    component_name: page0.bright_plus
+    id: bright_plus
+    on_click:
+      if:
+        condition:
+          lambda: |-
+            return id(cuisine_light).state;
+        then:
+          - lambda: |-
+              id(plus_13)->execute(id(bright_text).state);
+              id(text_bright)->execute();
+          - if:
+              condition:
+                lambda: 'return stoi(id(bright_text).state) > 250;'
+              then:
+                homeassistant.service:
+                  service: light.turn_on
+                  data:
+                    entity_id: light.planfond
+                    brightness: "255"
+              else:
+                homeassistant.service:
+                  service: light.turn_on
+                  data:
+                    entity_id: light.planfond
+                    brightness: !lambda 'return id(cuisine_planfond_bright).state;'
+
+  - platform: nextion
+    page_id: 0
+    component_id: 6
+    component_name: page0.b2
+    id: b2
+    on_press:
+      then:
+        if:
+          condition:
+            lambda: |-
+              return id(cuisine_light).state;
+          then:
+            homeassistant.service:
+              service: light.turn_on
+              data:
+                entity_id: light.planfond
+                brightness: "64"
+  
+  - platform: nextion
+    page_id: 0
+    component_id: 7
+    component_name: page0.b3
+    id: b3
+    on_press:
+      then:
+        if:
+          condition:
+            lambda: |-
+              return id(cuisine_light).state;
+          then:
+            homeassistant.service:
+              service: light.turn_on
+              data:
+                entity_id: light.planfond
+                brightness: "128"
+
+  - platform: nextion
+    page_id: 0
+    component_id: 8
+    component_name: page0.b4
+    id: b4
+    on_press:
+      then:
+        if:
+          condition:
+            lambda: |-
+              return id(cuisine_light).state;
+          then:
+            homeassistant.service:
+              service: light.turn_on
+              data:
+                entity_id: light.planfond
+                brightness: "192"
+  
+  - platform: nextion
+    page_id: 0
+    component_id: 9
+    component_name: page0.b5
+    id: b5
+    on_press:
+      then:
+        if:
+          condition:
+            lambda: |-
+              return id(cuisine_light).state;
+          then:
+            homeassistant.service:
+              service: light.turn_on
+              data:
+                entity_id: light.planfond
+                brightness: "255"
+
+
+  - platform: nextion
+    page_id: 1
+    component_id: 7
+    component_name: page1.r0
+    id: bar_minuterie
+    update_interval: 1s
+    on_press:
+      then:
+        logger.log: "bar minuterie"
+  
+  - platform: nextion
+    page_id: 1
+    component_id: 7
+    component_name: page1.r1
+    id: bar_on_off
+    update_interval: 1s
+    on_press:
+      then:
+        logger.log: "bar on_off"
+
+  - platform: nextion
+    page_id: 1
+    component_id: 5
+    component_name: page1.bt1
+    id: bar_light
+    update_interval: 1s
+
+  
+
+  
+
+  
+    

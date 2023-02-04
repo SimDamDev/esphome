@@ -1,0 +1,28 @@
+{
+  "storage_version": 1,
+  "name": "esp8622-1",
+  "comment": null,
+  "esphome_version": "2022.12.6",
+  "src_version": 1,
+  "address": "esp8622-1.local",
+  "web_port": null,
+  "esp_platform": "ESP8266",
+  "build_path": "/config/esphome/.esphome/build/esp8622-1",
+  "firmware_bin_path": "/data/esp8622-1/.pioenvs/esp8622-1/firmware.bin",
+  "loaded_integrations": [
+    "api",
+    "async_tcp",
+    "captive_portal",
+    "esp8266",
+    "esphome",
+    "logger",
+    "md5",
+    "mdns",
+    "network",
+    "ota",
+    "preferences",
+    "socket",
+    "web_server_base",
+    "wifi"
+  ]
+}

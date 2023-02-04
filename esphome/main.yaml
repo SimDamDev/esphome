@@ -1,0 +1,309 @@
+esphome:
+  name: cuisineesp #change this on each device
+  
+<<: !include test.yaml
+<<: !include sensor.yaml
+<<: !include binary_sensor
+
+esp8266:
+  board: nodemcu
+
+logger:
+  baud_rate: 0 
+
+# Enable Home Assistant API
+api:
+  encryption:
+    key: "PmQUYG9wOaaqZ7GBoCELaEpCqvV/6KtEjPjiRE9tMLQ="
+  services:
+    - service: update_nextion
+      then:
+        - lambda: 'id(cuisinenx)->upload_tft();'
+
+ota:
+  password: "2933efd587609f09d4a9dd9d0ac38e59"
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+  manual_ip:
+    static_ip: !secret ip_static_1 #change this on each device
+    gateway: 192.168.1.1
+    subnet: 255.255.255.0
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Test-Nodemcu Fallback Hotspot"
+    password: "VBYqL086beIb"
+
+uart:
+  id: uart_2
+  rx_pin: RX 
+  tx_pin: TX
+  baud_rate: 9600
+
+
+display:
+  - platform: nextion
+    id: cuisinenx #change this on each device
+    uart_id: uart_2
+    tft_url : 'http://192.168.1.124:8123/local/tft/cuisinenx.tft'
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

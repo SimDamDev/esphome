@@ -1,0 +1,16 @@
+sensor:
+  - platform: dht
+    pin: D7
+    model: dht11
+    temperature:
+      name: "Temperature"
+      id : temp
+    humidity:
+      name: "Humidite"
+      id : humid
+    update_interval: 30s
+
+  - platform: homeassistant
+    entity_id: light.planfond
+    id : cuisine_planfond_bright
+    attribute: brightness
