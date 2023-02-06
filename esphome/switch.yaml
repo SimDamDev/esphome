@@ -1,0 +1,18 @@
+switch:
+  - platform: template
+    id : switch_planfond
+    name: "switch planfond"
+    lambda: |-
+      if (id(planfond_state)) {
+        return true;
+      } else {
+        return false;
+      }
+    turn_on_action:
+      - lambda: |-
+          id(planfond_state) = true;
+          id(update_all)->execute();
+    turn_off_action:
+      - lambda: |-
+          id(planfond_state) = false;
+          id(update_all)->execute();

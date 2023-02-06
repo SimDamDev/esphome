@@ -17,6 +17,7 @@
     "display",
     "esp8266",
     "esphome",
+    "globals",
     "gpio",
     "homeassistant",
     "light",

@@ -1,0 +1,32 @@
+globals:
+
+  - id: current_page_list
+    type: std::vector<std::string>
+    initial_value: '{"home", "planfond", "bar", "temperature"}'
+
+  - id: current_page_int
+    type: int
+    initial_value: "0"
+  
+  - id: page
+    type: std::string
+  
+  - id: max_page
+    type: int
+    initial_value: "4"
+
+  - id: planfond_state
+    type: bool
+    initial_value: "false"
+
+  - id: bar_state
+    type: bool
+    initial_value: "false"
+
+  - id: bar_on_off
+    type: bool
+    initial_value: "false"
+
+  - id: bar_minuterie_state
+    type: bool
+    initial_value: "true"
