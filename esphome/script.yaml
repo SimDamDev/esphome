@@ -1,0 +1,122 @@
+script:
+
+  - id: page_next
+    parameters:
+      p: int
+    then:
+      lambda: |-
+        int maxpage = id(max_page);
+        p = p + 1;
+        if (p > maxpage-1) {
+          p = 0;
+        }
+        id(page) = (id(current_page_list)[p].c_str());
+        id(cuisinenx).send_command_printf("page %s", id(page).c_str());
+        id(current_page_int) = p;
+        id(update_all)->execute();
+
+  - id: page_back
+    parameters:
+      p: int
+    then:
+      lambda: |-
+        int maxpage = id(max_page);
+        p = p - 1;
+        if (p < 0) {
+          p = maxpage-1;
+        }
+        id(page) = (id(current_page_list)[p].c_str());
+        id(cuisinenx).send_command_printf("page %s", id(page).c_str());
+        id(current_page_int) = p;
+        id(update_all)->execute();
+
+  - id: update_planfond_state
+    then:
+      lambda: |-
+        if(id(planfond_state) == 0){
+          id(cuisinenx).send_command_printf("planfond.b0.pic=1");
+          id(turn_off_planfond)->execute();
+        }
+        if(id(planfond_state) == 1){
+          id(cuisinenx).send_command_printf("planfond.b0.pic=2");
+          id(turn_on_planfond)->execute();
+        }
+  
+  - id: update_planfond_state_from_home
+    then:
+      lambda: |-
+        if(id(planfond_state) == 0){
+          id(planfond_state) = 0;
+          id(cuisinenx).send_command_printf("home.b0.pic=1");
+          id(turn_off_planfond)->execute();
+        }
+        if(id(planfond_state) == 1){
+          id(planfond_state) = 1;
+          id(cuisinenx).send_command_printf("home.b0.pic=2");
+          id(turn_on_planfond)->execute();
+        }
+
+  - id: update_all
+    then:
+      lambda: |-
+        if (id(current_page_int)==0){
+            id(planfond_state) = id(cuisine_planfond_state).state;
+            id(update_planfond_state_from_home)->execute();
+
+          }
+          if (id(current_page_int)==1){
+            id(planfond_state) = id(cuisine_planfond_state).state;
+            id(update_planfond_state)->execute();
+
+          }
+          if (id(current_page_int)==2){
+
+          }
+          if (id(current_page_int)==3){
+
+          }
+  
+  - id: turn_on_planfond
+    then:
+      - homeassistant.service:
+          service: light.turn_on
+          data:
+            entity_id: light.planfond
+
+  - id: turn_off_planfond
+    then:
+      - homeassistant.service:
+          service: light.turn_off
+          data:
+            entity_id: light.planfond
+  
+  - id: text_bright
+    then:
+      if:
+        condition:
+          lambda: |-
+            return id(cuisine_planfond_state).state;
+        then:
+          lambda: |-
+            id(cuisinenx).set_component_text_printf("planfond.bright","%i %%", int(id(cuisine_planfond_bright).state)*100/255);
+        else:
+          lambda: |-
+            id(cuisinenx).set_component_text_printf("planfond.bright", "0%%");
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

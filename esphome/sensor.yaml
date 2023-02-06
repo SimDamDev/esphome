@@ -14,3 +14,7 @@ sensor:
     entity_id: light.planfond
     id : cuisine_planfond_bright
     attribute: brightness
+    on_value:
+      then: 
+        - lambda: |-
+            id(text_bright)->execute();

@@ -22,6 +22,7 @@
 #include "esphome/components/esp8266/core.h"
 #include "esphome/components/esp8266/gpio.h"
 #include "esphome/components/esp8266/preferences.h"
+#include "esphome/components/globals/globals_component.h"
 #include "esphome/components/gpio/output/gpio_binary_output.h"
 #include "esphome/components/homeassistant/binary_sensor/homeassistant_binary_sensor.h"
 #include "esphome/components/homeassistant/sensor/homeassistant_sensor.h"

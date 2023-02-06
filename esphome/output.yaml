@@ -1,0 +1,9 @@
+light: 
+  - platform: binary
+    name: bar
+    output: bar_output
+
+output:
+  - id: bar_output
+    platform: gpio
+    pin: GPIO05

@@ -1,61 +1,54 @@
-- id: '1675285197302'
-  alias: USFL planfond cuisine
-  description: update the switch state from the light state
+- id: '1675562154316'
+  alias: update switch state
+  description: ''
   trigger:
   - platform: state
-    entity_id: light.planfond
-    from: 'on'
-    to: 'off'
-  - platform: state
-    entity_id: light.planfond
+    entity_id:
+    - light.planfond
     from: 'off'
     to: 'on'
+    for:
+      hours: 0
+      minutes: 0
+      seconds: 5
+  - platform: state
+    entity_id:
+    - light.planfond
+    from: 'on'
+    to: 'off'
+    for:
+      hours: 0
+      minutes: 0
+      seconds: 5
+  condition: []
   action:
   - choose:
     - conditions:
-      - condition: state
-        entity_id: light.planfond
-        state: 'on'
+      - condition: and
+        conditions:
+        - condition: state
+          entity_id: light.planfond
+          state: 'on'
+        - condition: state
+          entity_id: switch.switch_planfond
+          state: 'off'
       sequence:
       - service: switch.turn_on
         data: {}
         target:
-          entity_id: switch.switch_cuisine
+          entity_id: switch.switch_planfond
     - conditions:
-      - condition: state
-        entity_id: light.planfond
-        state: 'off'
+      - condition: and
+        conditions:
+        - condition: state
+          entity_id: light.planfond
+          state: 'off'
+        - condition: state
+          entity_id: switch.switch_planfond
+          state: 'on'
       sequence:
       - service: switch.turn_off
-        entity_id: switch.switch_cuisine
-- id: '1675285684637'
-  alias: ULFS planfond cuisine
-  description: update light from switch
-  trigger:
-  - platform: state
-    entity_id:
-    - switch.switch_cuisine
-    from: 'on'
-    to: 'off'
-  - platform: state
-    entity_id:
-    - switch.switch_cuisine
-    from: 'off'
-    to: 'on'
-  action:
-  - choose:
-    - conditions:
-      - condition: state
-        entity_id: switch.switch_cuisine
-        state: 'on'
-      sequence:
-      - service: light.turn_on
-        entity_id: light.planfond
-    - conditions:
-      - condition: state
-        entity_id: switch.switch_cuisine
-        state: 'off'
-      sequence:
-      - service: light.turn_off
-        entity_id: light.planfond
+        data: {}
+        target:
+          entity_id: switch.switch_planfond
   mode: single

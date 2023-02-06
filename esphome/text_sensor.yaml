@@ -1,0 +1,9 @@
+text_sensor:
+  platform: template
+  id: bright_text
+  name: "bright"
+  lambda: |-
+      std::string text = "";
+      text = to_string(int(id(cuisine_planfond_bright).state));
+      return {text};
+  update_interval: 5s

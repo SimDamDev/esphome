@@ -3,62 +3,237 @@ binary_sensor:
   - platform: homeassistant
     entity_id: light.planfond
     id: cuisine_planfond_state
+    on_state:
+      then:
+        lambda: |-
+          id(text_bright)->execute();
+
+########################### Navigation ############################################
 
   - platform: nextion
     page_id: 0
     component_id: 1
-    component_name: page0.bt0
-    id: cuisine_light
+    id: page0back
     update_interval: 1s
+    on_press:
+      then:
+        - lambda: |-
+            id(page_back)->execute(id(current_page_int));
+        - logger.log: 
+            level: INFO
+            format: "page %i, %s"
+            args: [id(current_page_int), id(page).c_str()]
 
   - platform: nextion
     page_id: 0
+    component_id: 2
+    id: page0next
+    update_interval: 1s
+    on_press:
+      then:
+        - lambda: |-
+            id(page_next)->execute(id(current_page_int));
+        - logger.log: 
+            level: INFO
+            format: "page %i, %s"
+            args: [id(current_page_int), id(page).c_str()]
+    
+  - platform: nextion
+    page_id: 1
+    component_id: 10
+    id: page1back
+    update_interval: 1s
+    on_press:
+      then:
+        - lambda: |-
+            id(page_back)->execute(id(current_page_int));
+        - logger.log: 
+            level: INFO
+            format: "page %i, %s"
+            args: [id(current_page_int), id(page).c_str()]
+
+  - platform: nextion
+    page_id: 1
+    component_id: 9
+    id: page1next
+    update_interval: 1s
+    on_press:
+      then:
+        - lambda: |-
+            id(page_next)->execute(id(current_page_int));
+        - logger.log: 
+            level: INFO
+            format: "page %i, %s"
+            args: [id(current_page_int), id(page).c_str()]
+
+  - platform: nextion
+    page_id: 1
+    component_id: 11
+    id: page1home
+    update_interval: 1s
+    on_press:
+      then:
+        - lambda: |-
+            id(cuisinenx).send_command_printf("page home");
+            id(current_page_int) = 0;
+            id(update_all)->execute();
+
+  - platform: nextion
+    page_id: 2
+    component_id: 1
+    id: page2back
+    update_interval: 1s
+    on_press:
+      then:
+        - lambda: |-
+            id(page_back)->execute(id(current_page_int));
+        - logger.log: 
+            level: INFO
+            format: "page %i, %s"
+            args: [id(current_page_int), id(page).c_str()]
+
+  - platform: nextion
+    page_id: 2
+    component_id: 2
+    id: page2next
+    update_interval: 1s
+    on_press:
+      then:
+        - lambda: |-
+            id(page_next)->execute(id(current_page_int));
+        - logger.log: 
+            level: INFO
+            format: "page %i, %s"
+            args: [id(current_page_int), id(page).c_str()]
+
+  - platform: nextion
+    page_id: 2
     component_id: 3
-    component_name: page0.bright_minus
+    id: page2home
+    update_interval: 1s
+    on_press:
+      then:
+        - lambda: |-
+            id(cuisinenx).send_command_printf("page home");
+            id(current_page_int) = 0;
+            id(update_all)->execute();
+
+  - platform: nextion
+    page_id: 3
+    component_id: 5
+    id: page3back
+    update_interval: 1s
+    on_press:
+      then:
+        - lambda: |-
+            id(page_back)->execute(id(current_page_int));
+        - logger.log: 
+            level: INFO
+            format: "page %i, %s"
+            args: [id(current_page_int), id(page).c_str()]
+
+  - platform: nextion
+    page_id: 3
+    component_id: 6
+    id: page3next
+    update_interval: 1s
+    on_press:
+      then:
+        - lambda: |-
+            id(page_next)->execute(id(current_page_int));
+        - logger.log: 
+            level: INFO
+            format: "page %i, %s"
+            args: [id(current_page_int), id(page).c_str()]#
+
+  - platform: nextion
+    page_id: 3
+    component_id: 7
+    id: page3home
+    update_interval: 1s
+    on_press:
+      then:
+        - lambda: |-
+            id(cuisinenx).send_command_printf("page home");
+            id(current_page_int) = 0;
+            id(update_all)->execute();
+    
+#############################################################################
+
+######################## bouton planfond ####################################
+
+  - platform: nextion
+    page_id: 0
+    component_id: 4
+    component_name: home.b0
+    id: home_b0
+    on_click:
+      then:
+        - lambda: |-
+            id(planfond_state) = !id(planfond_state);
+            id(update_planfond_state_from_home)->execute();
+        - logger.log: 
+            level: INFO
+            format: "planfond_state %i"
+            args: [id(planfond_state)]
+  
+  - platform: nextion
+    page_id: 1
+    component_id: 12
+    component_name: planfond.b0
+    id: planfond_b0
+    update_interval: 1s
+    on_click:
+      then:
+        - lambda: |-
+            id(planfond_state) = !id(planfond_state);
+            id(update_planfond_state)->execute();
+        - logger.log: 
+            level: INFO
+            format: "planfond_state %i"
+            args: [id(planfond_state)]
+
+#############################################################################
+
+########################### Dim planfond ####################################
+
+  - platform: nextion
+    page_id: 1
+    component_id: 2
     id: bright_minus
     on_click:
     #possible de deplacer ca dans un script?
       if:
         condition:
           lambda: |-
-            return id(cuisine_light).state;
+            return id(cuisine_planfond_state).state;
         then:
-          - lambda: |-
-              id(minus_13)->execute(id(bright_text).state);
-              id(text_bright)->execute();
           - if:
               condition:
-                lambda: 'return stoi(id(bright_text).state) < 13;'
+                lambda: 'return stoi(id(bright_text).state) > 13;'
               then:
                 homeassistant.service:
                   service: light.turn_on
                   data:
                     entity_id: light.planfond
-                    brightness: "10"
-              else:
-                homeassistant.service:
-                  service: light.turn_on
-                  data:
-                    entity_id: light.planfond
-                    brightness: !lambda 'return id(cuisine_planfond_bright).state;'
+                    brightness_step: "-13" 
+                    transition: "2"
+
 
   - platform: nextion
-    page_id: 0
-    component_id: 4
-    component_name: page0.bright_plus
+    page_id: 1
+    component_id: 3
     id: bright_plus
     on_click:
+    #possible de deplacer ca dans un script?
       if:
         condition:
           lambda: |-
-            return id(cuisine_light).state;
+            return id(cuisine_planfond_state).state;
         then:
-          - lambda: |-
-              id(plus_13)->execute(id(bright_text).state);
-              id(text_bright)->execute();
           - if:
               condition:
-                lambda: 'return stoi(id(bright_text).state) > 250;'
+                lambda: 'return stoi(id(bright_text).state) > 255;'
               then:
                 homeassistant.service:
                   service: light.turn_on
@@ -70,19 +245,23 @@ binary_sensor:
                   service: light.turn_on
                   data:
                     entity_id: light.planfond
-                    brightness: !lambda 'return id(cuisine_planfond_bright).state;'
+                    brightness_step: "+13" 
+                    transition: "2"
+
+#############################################################################
+
+########################### preset dim button ################################
 
   - platform: nextion
-    page_id: 0
-    component_id: 6
-    component_name: page0.b2
-    id: b2
+    page_id: 1
+    component_id: 5
+    id: bright_25
     on_press:
       then:
         if:
           condition:
             lambda: |-
-              return id(cuisine_light).state;
+              return true;
           then:
             homeassistant.service:
               service: light.turn_on
@@ -91,16 +270,15 @@ binary_sensor:
                 brightness: "64"
   
   - platform: nextion
-    page_id: 0
-    component_id: 7
-    component_name: page0.b3
-    id: b3
+    page_id: 1
+    component_id: 6
+    id: bright_50
     on_press:
       then:
         if:
           condition:
             lambda: |-
-              return id(cuisine_light).state;
+              return true;
           then:
             homeassistant.service:
               service: light.turn_on
@@ -109,16 +287,15 @@ binary_sensor:
                 brightness: "128"
 
   - platform: nextion
-    page_id: 0
-    component_id: 8
-    component_name: page0.b4
-    id: b4
+    page_id: 1
+    component_id: 7
+    id: bright_75
     on_press:
       then:
         if:
           condition:
             lambda: |-
-              return id(cuisine_light).state;
+              return true;
           then:
             homeassistant.service:
               service: light.turn_on
@@ -127,16 +304,15 @@ binary_sensor:
                 brightness: "192"
   
   - platform: nextion
-    page_id: 0
-    component_id: 9
-    component_name: page0.b5
-    id: b5
-    on_press:
+    page_id: 1
+    component_id: 8
+    id: bright_100
+    on_click:
       then:
         if:
           condition:
             lambda: |-
-              return id(cuisine_light).state;
+              return true;
           then:
             homeassistant.service:
               service: light.turn_on
@@ -144,6 +320,7 @@ binary_sensor:
                 entity_id: light.planfond
                 brightness: "255"
 
+#############################################################################
 
   - platform: nextion
     page_id: 1

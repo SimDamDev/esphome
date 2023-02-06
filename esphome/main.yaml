@@ -1,9 +1,15 @@
 esphome:
   name: cuisineesp #change this on each device
   
-<<: !include test.yaml
-<<: !include sensor.yaml
-<<: !include binary_sensor
+<<:
+  - !include test.yaml
+  - !include sensor.yaml
+  - !include binary_sensor.yaml
+  - !include script.yaml
+  - !include globals.yaml
+  - !include switch.yaml
+  - !include text_sensor.yaml
+  - !include output.yaml
 
 esp8266:
   board: nodemcu
@@ -48,6 +54,11 @@ display:
     id: cuisinenx #change this on each device
     uart_id: uart_2
     tft_url : 'http://192.168.1.124:8123/local/tft/cuisinenx.tft'
+    lambda : |-
+      it.set_component_value("temperature.temp", (id(temp).state)*10);
+      it.set_component_value("temperature.humid", (id(humid).state)*10);
+
+          
 
 
 
